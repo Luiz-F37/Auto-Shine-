@@ -1,6 +1,6 @@
 import { Button, HStack, Icon, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { LuCar } from "react-icons/lu";
-import { ColorModeButton } from "../ui/color-mode";
+import { ColorModeButton } from "./ui/color-mode";
 import NextLink from "next/link";
 
 export function Header() {

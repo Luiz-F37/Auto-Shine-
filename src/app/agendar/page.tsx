@@ -1,34 +1,81 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
-import { Button, Heading, Text, VStack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+"use client"
+
+import { Button, ButtonGroup, Heading, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { LuArrowLeft } from "react-icons/lu";
 
 export default function Agendar() {
-    const steps = useSteps({
-        defaultStep: 1,
-        count: itens.length,
-    });
+  const steps = useSteps({
+    defaultStep: 0,
+    count: items.length,
+  });
 
-    
-    const router = useRouter();
+  const router = useRouter();
 
+  function handleGoToPrevStep() {
+    if (steps.hasPrevStep) {
+      steps.goToPrevStep();
+    } else {
+      router.push("/");
+    }
+  }
 
-    
+  return (
+    <VStack as="main" gap={0}>
+      <VStack w="100vw" as="section" align="start" pt={28} pb={16} px={6}>
+        <Button onClick={handleGoToPrevStep} variant="ghost" rounded="lg" mb={6}>
+          <LuArrowLeft />
+          {steps.hasPrevStep ? "Voltar" : "Inicio"}
+        </Button>
 
-    return(
-        <VStack as="main" gap={0}>
-            <VStack w="100v" as="section" align={"start"} pt={28} pb={16} px={6}>
-                <Button variant={"ghost"} rounded={"lg"} mb={6} asChild>
-                    <a href="/">
-                      <LuArrowLeft />
-                        {steps.value > 1 ? "Voltar" : "Início"}
-                    </a>
-                </Button>
+        <Heading as="h1" fontSize="4xl" mb={2}>Agendar Serviço</Heading>
 
-                <Heading as="h1">Agendar Serviço</Heading>
-                <Text>Passo {steps.value} de {steps.count}</Text>
+        {!steps.isCompleted && <Text mb={8}>Passo {steps.value + 1} de {steps.count}</Text>}
 
-            </VStack>
-        </VStack>
-    )
+        {steps.isCompleted && <Text mb={8}>Completo!</Text>}
+
+        <Steps.RootProvider value={steps}>
+          <Steps.List>
+            {items.map((step, index) => (
+              <Steps.Item key={index} index={index} title={step.title}>
+                <Steps.Indicator />
+                <Steps.Separator />
+              </Steps.Item>
+            ))}
+          </Steps.List>
+          {items.map((step, index) => (
+            <Steps.Content key={index} index={index}>
+              {step.description}
+            </Steps.Content>
+          ))}
+
+          <Steps.CompletedContent>All steps are complete!</Steps.CompletedContent>
+
+          <ButtonGroup size="sm" variant="outline">
+            <Steps.PrevTrigger asChild>
+              <Button>Prev</Button>
+            </Steps.PrevTrigger>
+            <Steps.NextTrigger asChild>
+              <Button>Next</Button>
+            </Steps.NextTrigger>
+          </ButtonGroup>
+        </Steps.RootProvider>
+      </VStack>
+    </VStack>
+  )
 }
+
+const items = [
+  {
+    title: "Step 1",
+    description: "Step 1 description",
+  },
+  {
+    title: "Step 2",
+    description: "Step 2 description",
+  },
+  {
+    title: "Step 3",
+    description: "Step 3 description",
+  },
+]
