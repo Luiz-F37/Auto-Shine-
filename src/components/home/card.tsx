@@ -1,6 +1,7 @@
 import { CardBody, CardFooter, CardRoot, Flex, Heading, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
+
 interface CardProps {
   icon: ReactNode;
   title: string;
