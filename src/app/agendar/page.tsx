@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Heading, HStack, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
+import { Button, Heading, HStack, Separator, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { LuArrowLeft } from "react-icons/lu";
 
@@ -22,7 +22,7 @@ export default function Agendar() {
 
   return (
     <VStack as="main" gap={0}>
-      <VStack w="100vw" as="section" align="start" pt={28} pb={16} px={6}>
+      <VStack w="100%" maxW={1440} mx="auto" as="section" align="start" pt={28} pb={16} px={6}>
         <Button onClick={handleGoToPrevStep} variant="ghost" rounded="lg" mb={6}>
           <LuArrowLeft />
           {steps.hasPrevStep ? "Voltar" : "Inicio"}
@@ -35,11 +35,10 @@ export default function Agendar() {
         {steps.isCompleted && <Text mb={8}>Completo!</Text>}
 
         <Steps.RootProvider value={steps}>
-          <Steps.List>
+          <Steps.List gap={4}>
             {items.map((step, index) => (
-              <Steps.Item key={index} index={index} title={step.title}>
-                <Steps.Indicator />
-                <Steps.Separator />
+              <Steps.Item flex={1} key={index} index={index} title={step.title}>
+                <Separator w="100%" borderColor={steps.value >= index ? "yellow.500" : "white"} borderWidth={2} />
               </Steps.Item>
             ))}
           </Steps.List>
