@@ -1,8 +1,12 @@
 "use client"
 
-import { Button, Heading, HStack, Separator, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
+import { Button, Heading, HStack, RadioCard, Separator, Steps, Text, useSteps, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { LuArrowLeft } from "react-icons/lu";
+
+import { motion } from "motion/react";
+import { ServiceCardItem } from "@/components/ui/service-card";
+import { useState } from "react";
 
 export default function Agendar() {
   const steps = useSteps({
@@ -20,6 +24,8 @@ export default function Agendar() {
     }
   }
 
+  const [value, setValue] = useState<string | null>(null);
+
   return (
     <VStack as="main" gap={0}>
       <VStack w="100%" maxW={1440} mx="auto" as="section" align="start" pt={28} pb={16} px={6}>
@@ -34,7 +40,7 @@ export default function Agendar() {
 
         {steps.isCompleted && <Text mb={8}>Completo!</Text>}
 
-        <Steps.RootProvider value={steps}>
+        <Steps.RootProvider value={steps} gap={10}>
           <Steps.List gap={4}>
             {items.map((step, index) => (
               <Steps.Item flex={1} key={index} index={index} title={step.title}>
@@ -44,7 +50,38 @@ export default function Agendar() {
           </Steps.List>
           {items.map((step, index) => (
             <Steps.Content key={index} index={index}>
-              {step.description}
+              {index === 0 && (
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0, transition: { duration: 10} }}>
+                <Heading as="h2" fontSize="2xl" fontWeight="semibold" color="yellow.300" mb={4}>Escolha o serviço</Heading>
+
+                <RadioCard.Root value={value} onValueChange={(e) => setValue(e.value)} gapY={4}>
+                  <ServiceCardItem value="polimento-premium" name="Polimento Premium" description="Duração: 3h" price="R$ 1200,00" />
+
+                  <ServiceCardItem value="vitrificacao" name="Vitrificação" description="Duração: 5h" price="R$ 800,00" />
+
+                  <ServiceCardItem value="lavagem-detalhada" name="Lavagem Detalhada" description="Duração: 1h30" price="R$ 120,00" />
+
+                  <ServiceCardItem value="higienizacao-interna" name="Higienização Interna" description="Duração: 2h" price="R$ 250,00" />
+                  
+                </RadioCard.Root>
+              </motion.div>
+              )}
+
+              {index === 1 && (
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0, transition: { duration: 10} }}>
+                <Heading as="h2" fontSize="2xl" fontWeight="semibold" color="yellow.300" mb={4}>Escolha Data e Hora</Heading>
+                  
+
+              </motion.div>
+              )} 
+
+              {index === 2 && (
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0, transition: { duration: 10} }}>
+                <Heading as="h2" fontSize="2xl" fontWeight="semibold" color="yellow.300" mb={4}>Seus Dados</Heading>
+
+                
+              </motion.div>
+              )} 
             </Steps.Content>
           ))}
 
@@ -52,7 +89,7 @@ export default function Agendar() {
 
           <HStack w="100%" justify={"end"}>
             <Steps.NextTrigger asChild>
-                <Button size={"lg"} colorPalette={"yellow"} rounded={"lg"}>continuar</Button>
+                <Button size={"lg"} colorPalette={"yellow"} rounded={"lg"} disabled={!value}>continuar</Button>
             </Steps.NextTrigger>
           </HStack>
         </Steps.RootProvider>
